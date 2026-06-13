@@ -3,7 +3,6 @@ package com.glpi.ticket.controller;
 import com.glpi.ticket.dto.SuperCostRequest;
 import com.glpi.ticket.model.SuperCost;
 import com.glpi.ticket.repository.SuperCostRepository;
-import com.glpi.ticket.service.SuperCostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,12 +13,9 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*")
 public class SuperCostController {
 
-    private final SuperCostService superCostService;
     private SuperCostRepository superCostRepository;
 
-    public SuperCostController(SuperCostService superCostService,
-                            SuperCostRepository superCostRepository) {
-        this.superCostService = superCostService;
+    public SuperCostController(SuperCostRepository superCostRepository) {
         this.superCostRepository = superCostRepository;
     }
     
@@ -40,15 +36,5 @@ public class SuperCostController {
         return ResponseEntity.ok(superCostRepository.findByIdTicket(idTicket));
     }
 
-
-    // @GetMapping("/{idTicket}")
-    // public ResponseEntity<?> getLastSuperCost(@PathVariable Long idTicket) {
-    //     return ResponseEntity.ok(superCostRepository.getLastIdByticketId(idTicket));
-    // }
-
-    @GetMapping("/{idTicket}")
-    public ResponseEntity<?> getLastSuperCost(@PathVariable Long idTicket) {
-        return ResponseEntity.ok(superCostService.getLastSuperCostByTicketId(idTicket));
-    }
 
 }

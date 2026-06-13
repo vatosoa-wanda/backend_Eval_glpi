@@ -9,5 +9,4 @@ import java.util.List;
 public interface SuperCostRepository extends JpaRepository<SuperCost, Long> {
     List<SuperCost> findByIdTicket(Long idTicket);
 
-    SuperCost getLastByticketId(Long idTicket);
 }
