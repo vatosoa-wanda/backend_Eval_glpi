@@ -25,7 +25,8 @@ public interface SuperCostRepository extends JpaRepository<SuperCost, Long> {
 
     @Query("SELECT s.itemType as itemType, " +
            "SUM(CASE WHEN s.typeCout = 'Glpi' THEN s.cost ELSE 0 END) as totalGlpiCost, " +
-           "SUM(CASE WHEN s.typeCout = 'SuperCost' THEN s.cost ELSE 0 END) as totalCost " +
+           "SUM(CASE WHEN s.typeCout = 'SuperCost' THEN s.cost ELSE 0 END) as totalCost, " +
+           "SUM(CASE WHEN s.typeCout = 'Reouverture' THEN s.cost ELSE 0 END) as totalReopenCost " +
            "FROM SuperCost s " +
            "GROUP BY s.itemType")
     List<StatSuperCostDTO> getSumOfCostsGroupedByItemType();
@@ -37,5 +38,8 @@ public interface SuperCostRepository extends JpaRepository<SuperCost, Long> {
     @Transactional
     @Query("DELETE FROM SuperCost s WHERE s.idTicket = :idTicket AND s.groupTimestamp = :groupTimestamp AND s.typeCout = 'SuperCost'")
     void deleteByIdTicketAndGroupTimestamp(@Param("idTicket") Long idTicket, @Param("groupTimestamp") Long groupTimestamp);
+
+    @Query("SELECT s FROM SuperCost s WHERE s.idTicket = :idTicket AND s.idItem = :idItem AND s.typeCout = 'Glpi'")
+    Optional<SuperCost> findGlpiCostByTicketAndItem(@Param("idTicket") Long idTicket, @Param("idItem") Long idItem);
 
 }

@@ -6,4 +6,5 @@ public interface StatSuperCostDTO {
     String getItemType();
     BigDecimal getTotalCost();
     BigDecimal getTotalGlpiCost();
+    BigDecimal getTotalReopenCost();
 }

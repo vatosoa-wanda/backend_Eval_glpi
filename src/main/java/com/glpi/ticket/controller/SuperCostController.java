@@ -72,5 +72,37 @@ public class SuperCostController {
         }
     }
 
+    // @GetMapping("/ticket/{idTicket}/last-superCost")
+    // public ResponseEntity<?> getLastSuperCostsByTicket(@PathVariable Long idTicket) {
+    //     return ResponseEntity.ok(superCostRepository.findFirstByIdTicketAndTypeCoutOrderByIdCostDesc(idTicket,"SuperCost"));
+    // }
+
+    @GetMapping("/last-supercost/ticket/{idTicket}")
+    public ResponseEntity<?> getLastSuperCostsByTicket(@PathVariable Long idTicket) {
+        Optional<SuperCost> latest = superCostRepository.findFirstByIdTicketAndTypeCoutOrderByIdCostDesc(idTicket, "SuperCost");
+        
+        if (latest.isPresent()) {
+            // Retourne l'unique ligne SuperCost trouvée
+            return ResponseEntity.ok(latest.get()); 
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Aucun SuperCost trouvé pour le ticket #" + idTicket);
+        }
+    }
+
+    @GetMapping("/ticket/{idTicket}/item/{idItem}/glpi-cost")
+    public ResponseEntity<?> getGlpiCostByTicketAndItem(@PathVariable Long idTicket, @PathVariable Long idItem) {
+        Optional<SuperCost> optSuperCost = superCostRepository.findGlpiCostByTicketAndItem(idTicket, idItem);
+        
+        if (optSuperCost.isPresent()) {
+            // On extrait l'objet et on renvoie directement son coût (BigDecimal)
+            return ResponseEntity.ok(optSuperCost.get().getCost());
+        } else {
+            // En cas d'absence, on renvoie le message d'erreur (String)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Aucun coût GLPI trouvé pour le ticket #" + idTicket + " et l'item #" + idItem);
+        }
+    }
+
 
 }
