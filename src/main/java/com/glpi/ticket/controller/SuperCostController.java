@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/super-cost")
@@ -50,6 +51,25 @@ public class SuperCostController {
     @GetMapping("/ticket/{idTicket}")
     public ResponseEntity<?> getSuperCostsByTicket(@PathVariable Long idTicket) {
         return ResponseEntity.ok(superCostRepository.findByIdTicket(idTicket));
+    }
+
+    @DeleteMapping("/ticket/{idTicket}/latest-batch")
+    public ResponseEntity<?> deleteLatestCostBatch(@PathVariable Long idTicket) {
+        try {
+            Optional<SuperCost> latest = superCostRepository.findFirstByIdTicketAndTypeCoutOrderByIdCostDesc(idTicket, "SuperCost");
+            
+            if (latest.isPresent() && latest.get().getGroupTimestamp() != null) {
+                Long lastTimestamp = latest.get().getGroupTimestamp();
+                superCostRepository.deleteByIdTicketAndGroupTimestamp(idTicket, lastTimestamp);
+                return ResponseEntity.ok("Le dernier lot de coûts (Timestamp: " + lastTimestamp + ") a été supprimé.");
+            }
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Aucun coût avec un groupe valide n'a été trouvé pour le ticket #" + idTicket);
+                    
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erreur lors de la suppression du lot de coûts : " + e.getMessage());
+        }
     }
 
 

@@ -7,6 +7,11 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import com.glpi.ticket.dto.StatSuperCostDTO;
 
+import java.util.Optional;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
+
 @Repository
 public interface SuperCostRepository extends JpaRepository<SuperCost, Long> {
     List<SuperCost> findByIdTicket(Long idTicket);
@@ -24,5 +29,13 @@ public interface SuperCostRepository extends JpaRepository<SuperCost, Long> {
            "FROM SuperCost s " +
            "GROUP BY s.itemType")
     List<StatSuperCostDTO> getSumOfCostsGroupedByItemType();
+
+    Optional<SuperCost> findFirstByIdTicketAndTypeCoutOrderByIdCostDesc(Long idTicket, String typeCout);
+
+    // 2. Supprimer TOUTES les lignes d'un lot via son groupTimestamp
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM SuperCost s WHERE s.idTicket = :idTicket AND s.groupTimestamp = :groupTimestamp AND s.typeCout = 'SuperCost'")
+    void deleteByIdTicketAndGroupTimestamp(@Param("idTicket") Long idTicket, @Param("groupTimestamp") Long groupTimestamp);
 
 }
