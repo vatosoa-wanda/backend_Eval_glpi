@@ -20,16 +20,32 @@ public class SuperCostController {
     }
     
     @PostMapping
-    public ResponseEntity<?> saveSuperCost(@RequestBody SuperCostRequest request) {
+    public ResponseEntity<?> saveCost(@RequestBody SuperCostRequest request) {
         try {
-            SuperCost superCost = new SuperCost(request.getIdTicket(), request.getSuperCost());
-            SuperCost saved = superCostRepository.save(superCost);
+            SuperCost Cost = new SuperCost(request.getIdTicket(), request.getTypeCout(), request.getCost(), request.getIdItem(), request.getItemType(), request.getGroupTimestamp());
+            SuperCost saved = superCostRepository.save(Cost);
             return ResponseEntity.ok(saved);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Erreur lors de l'enregistrement du superCost : " + e.getMessage());
         }
     }
+
+    @GetMapping("/stats-by-type")
+    public ResponseEntity<?> getSumOfCostsGroupedByItemType() {
+        try {
+            return ResponseEntity.ok(superCostRepository.getSumOfCostsGroupedByItemType());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erreur lors de la récupération des statistiques : " + e.getMessage());
+        }
+    }
+
+    // @GetMapping("/{itemType}")
+    // public ResponseEntity<?> getSuperCostByItemType(@PathVariable String itemType) {
+    //     return ResponseEntity.ok(superCostRepository.findByItemType(itemType));
+    // }
+
     
     @GetMapping("/ticket/{idTicket}")
     public ResponseEntity<?> getSuperCostsByTicket(@PathVariable Long idTicket) {

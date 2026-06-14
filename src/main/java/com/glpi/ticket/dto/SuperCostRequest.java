@@ -3,10 +3,15 @@ package com.glpi.ticket.dto;
 import java.math.BigDecimal;
 
 public class SuperCostRequest {
+
     private Long idTicket;
-    private BigDecimal superCost;
+    private String typeCout;
+    private BigDecimal cost;
+    private Long idItem;
+    private String itemType;
+    private Long groupTimestamp;
     
-    // Getters et Setters
+    
     public Long getIdTicket() {
         return idTicket;
     }
@@ -14,12 +19,45 @@ public class SuperCostRequest {
     public void setIdTicket(Long idTicket) {
         this.idTicket = idTicket;
     }
-    
-    public BigDecimal getSuperCost() {
-        return superCost;
+
+    public String getTypeCout() {
+        return typeCout;
+    }
+
+    public void setTypeCout(String typeCout) {
+        this.typeCout = typeCout;
     }
     
-    public void setSuperCost(BigDecimal superCost) {
-        this.superCost = superCost;
+    public BigDecimal getCost() {
+        return cost;
+    }
+    
+    public void setCost(BigDecimal cost) {
+        this.cost = cost;
+    }
+
+
+    public Long getIdItem() {
+        return idItem;
+    }
+
+    public void setIdItem(Long idItem) {
+        this.idItem = idItem;
+    }
+
+    public String getItemType() {
+        return itemType;
+    }
+
+    public void setItemType(String itemType) {
+        this.itemType = itemType;
+    }
+
+    public Long getGroupTimestamp() {
+        return groupTimestamp;
+    }
+
+    public void setGroupTimestamp(Long groupTimestamp) {
+        this.groupTimestamp = groupTimestamp;
     }
 }
