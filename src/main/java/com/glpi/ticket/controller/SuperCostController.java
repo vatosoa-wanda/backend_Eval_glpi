@@ -104,5 +104,17 @@ public class SuperCostController {
         }
     }
 
+    // Ajouter cette méthode dans SuperCostController.java
+    @DeleteMapping("/all")
+    public ResponseEntity<?> deleteAllSuperCost() {
+        try {
+            superCostRepository.deleteAllSuperCost();
+            return ResponseEntity.ok("Tous les SuperCost ont été supprimés avec succès.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erreur lors de la suppression des SuperCost : " + e.getMessage());
+        }
+    }
+
 
 }

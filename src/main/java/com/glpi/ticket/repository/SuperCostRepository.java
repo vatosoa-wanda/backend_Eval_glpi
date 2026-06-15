@@ -42,4 +42,9 @@ public interface SuperCostRepository extends JpaRepository<SuperCost, Long> {
     @Query("SELECT s FROM SuperCost s WHERE s.idTicket = :idTicket AND s.idItem = :idItem AND s.typeCout = 'Glpi'")
     Optional<SuperCost> findGlpiCostByTicketAndItem(@Param("idTicket") Long idTicket, @Param("idItem") Long idItem);
 
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM SuperCost s")
+    void deleteAllSuperCost();
 }
